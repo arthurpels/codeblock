@@ -1,0 +1,138 @@
+body {
+  background: #430606;
+  font-family: Arial;
+  /* отвечает за отступы вокруг всего документа */
+  margin: 0;
+  height: 100vh;
+}
+
+#all {
+  /* выстраивает в строку автоматически, адаптивное выравнивание */
+  display: flex;
+  /* пространство между границей и всеми блоками */
+  padding: 20px;
+  /* расстояние между дочерними элементами/блоками */
+  gap: 20px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.panel {
+  border: 3px solid black;
+  /* box-sizing: border-box; */
+  background: white;
+  border-radius: 30px;
+  /* растягивает блок на всю высоту родителя */
+  display: flex;
+  flex-direction: column;
+}
+
+#blocks {
+  width: 250px;
+}
+
+#workspace {
+  border: 3px solid black;
+  background: #efeef1;
+  /* пространство между контентом элемента (текст, картинка) и его границей (border). размер окна*/
+  padding: 10px;
+  border-radius: 10px;
+  /* пунктирная рамка */
+  border-style: dashed;
+  flex: 1;
+}
+
+#console-panel {
+  border: 3px solid black;
+  background: gray;
+  width: 250px;
+  padding: 20px;
+}
+
+#console {
+  border: 3px solid black;
+  background: rgb(198, 197, 197);
+  /* автоматически растягивает на всю высоту родителя */
+  flex: 1;
+  border-radius: 10px;
+}
+
+#blocks,
+#programm {
+  border: 3px solid black;
+  background: white;
+  padding: 50px;
+  width: 200px;
+}
+
+#programm {
+    /* занимает все свободное пространство */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.block {
+  background: white;
+  border: 3px solid black;
+  /* закругляет углы */
+  border-radius: 10px;
+  padding: 10px;
+  /* расстояние вокруг элемента за его границей */
+  margin: 5px   ;
+  text-align: center;
+  /* наведение курсора на блоки */
+  cursor: grab;
+}
+
+div[data-type="declare"] {
+  background: rgb(152, 228, 152);
+}
+
+div[data-type="assign"] {
+  background: rgb(235, 231, 125);
+}
+
+div[data-type="if"] {
+  background: rgb(163, 172, 231);
+}
+
+div[data-type="ifelse"] {
+  background: rgb(240, 152, 122);
+}
+
+div[data-type="while"] {
+  background: rgb(243, 141, 253);
+}
+
+#buttons {
+  display: flex;
+  /* выравнивание по центру */
+  justify-content: center;
+  /* отступ между кнопками */
+  gap: 20px;
+  /* отступ от кнопок до границы ТОЛЬКО СВЕРХУ */
+  margin-top: 20px; 
+}
+
+#start {
+  border: 3px solid black;
+  background: rgb(121, 235, 121);
+  border-radius: 7px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#stop {
+  border: 3px solid black;
+  background: rgb(237, 127, 102);
+  border-radius: 7px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
