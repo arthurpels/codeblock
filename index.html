@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>codeblock</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="all">
+      <div class="panel" id="blocks">
+        <h2>Блоки</h2>
+
+        <h3>Переменные</h3>
+        <div class="block" data-type="declare">Объявить</div>
+
+        <h3>Операции</h3>
+        <div class="block" data-type="assign">Присвоить</div>
+
+        <h3>Логика</h3>
+        <div class="block" data-type="if">Если</div>
+        <div class="block" data-type="ifelse">Если/иначе</div>
+
+        <h3>Циклы</h3>
+        <div class="block" data-type="while">Пока</div>
+      </div>
+
+      <div class="panel" id="programm">
+        <h2>Программа</h2>
+        <div id="workspace"></div>
+        <div id="buttons">
+          <button id="start">Запустить</button>
+          <button id="stop">Остановить</button>
+        </div>
+      </div>
+
+      <div class="panel" id="console-panel">
+        <h2>Консоль</h2>
+        <div id="console"></div>
+      </div>
+    </div>
+
+    <script type = "module" src="/src/main.ts"></script>
+  </body>
+</html>
