@@ -36,8 +36,56 @@ workspace.addEventListener('drop', (e) => {
     newBlock.className = 'block';
     newBlock.setAttribute('data-type', blockType);
     
-    newBlock.textContent = `Блок: ${blockType}`;
-    
+
+    switch (blockType) {
+        case 'declare':
+          newBlock.innerHTML = `
+          <div class="block-label">Объявить переменную:</div>
+          <input type="text" class="block-input" placeholder="x, y, ...">
+          `;
+          break;
+
+        case 'assign':
+          newBlock.innerHTML = `
+          <div class="block-label">Присвоить значение:</div>
+          <input type="text" class="block-input var" placeholder="x">
+          <span>=</span>
+          <input type="text" class="block-input value" placeholder="10">
+          `;
+          break;
+
+        case 'if':
+          newBlock.innerHTML = `
+          <div class="block-label">Если:</div>
+          <input type="text" class="block-input condition" placeholder="x > 0">
+          `;
+          break;
+
+        case 'ifelse':
+          newBlock.innerHTML = `
+          <div class="block-label">Если:</div>
+          <input type="text" class="block-input condition" placeholder="x > 0">
+          <div class="if-else">Иначе:</div>
+          `;
+          break;
+
+        case 'while':
+          newBlock.innerHTML = `
+          <div class="block-label">Пока:</div>
+          <input type="text" class="block-input condition" placeholder="x > 0">
+          `;
+          break;
+
+        default:
+          newBlock.textContent = `Блок: ${blockType}`;
+    }
+
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'X';
+    removeButton.className = 'remove-button';
+    removeButton.onclick = () => newBlock.remove(); 
+    newBlock.appendChild(removeButton);
+
     workspace.appendChild(newBlock);
   }
 });
