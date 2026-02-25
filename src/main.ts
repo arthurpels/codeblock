@@ -1,12 +1,11 @@
+import { Program, DeclareNode } from "./logic"
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
-// 1. Делаем блоки перетаскиваемыми
 blocks.forEach(block => {
   block.setAttribute('draggable', 'true');
   
   block.addEventListener('dragstart', (e) => {
-    // Запоминаем тип блока 
     const type = block.getAttribute('data-type');
     if (type && e.dataTransfer) {
       e.dataTransfer.setData('text/plain', type);
@@ -14,7 +13,6 @@ blocks.forEach(block => {
   });
 });
 
-// 2. Настраиваем рабочую область: разрешаем бросать в неё элементы
 
 workspace.addEventListener('dragover', (e) => {
   e.preventDefault();
@@ -92,5 +90,34 @@ workspace.addEventListener('drop', (e) => {
 
 const startBtn = document.getElementById('start') as HTMLButtonElement;
 startBtn.addEventListener('click', () => {
-  console.log('Кнопка Запуск нажата.');
+  console.clear();
+  console.log("Начинаем сборку алгоритма...");
+
+  const program = new Program();
+  const visualBlocks = Array.from(workspace.querySelectorAll(".block"));
+
+  for (const block of visualBlocks){
+    const type = block.getAttribute('data-type');
+    if (type === "declare"){
+      const inputElement = block.querySelector(".var-name-input") as HTMLInputElement;
+
+      const varName = inputElement ? inputElement.value : "unknown_var";
+
+      if (!varName){
+        console.error("Ошибка: Имя переменной не может быть пустым!");
+        // block.style.borderColor = 'red';
+        return;
+      }
+
+      const node = new DeclareNode(varName);
+
+      program.addNode(node);
+    }
+  }
+  program.run();
 });
+
+const testProgram = new Program();
+testProgram.addNode(new DeclareNode("x"));
+testProgram.addNode(new DeclareNode("y"));
+testProgram.run();
