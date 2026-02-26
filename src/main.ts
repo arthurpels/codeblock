@@ -39,7 +39,7 @@ workspace.addEventListener('drop', (e) => {
         case 'declare':
           newBlock.innerHTML = `
           <div class="block-label">Объявить переменную:</div>
-          <input type="text" class="block-input" placeholder="x, y, ...">
+          <input type="text" class="block-input var-name-input" placeholder="x, y, ...">
           `;
           break;
 
