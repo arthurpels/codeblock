@@ -52,3 +52,84 @@ export class Program {
     context.printMemory();
   }
 }
+
+export interface ExpressionNode{
+    evaluate(context: ExecutionContext): number;
+}
+
+export class NumberNode implements ExpressionNode {
+  private value: number;
+
+  constructor(value: number) {
+    this.value = value;
+  }
+
+  evaluate(context: ExecutionContext): number {
+    return this.value;
+  }
+}
+
+export class ReadVariableNode implements ExpressionNode {
+  private varName: string;
+
+  constructor(varName: string) {
+    this.varName = varName;
+  }
+
+  evaluate(context: ExecutionContext): number {
+    if (!context.variables.has(this.varName)) {
+      console.error(`Ошибка: Переменная "${this.varName}" не найдена для чтения!`);
+      return 0;
+    }
+    return context.variables.get(this.varName)!;
+  }
+}
+
+export class MathOperationNode implements ExpressionNode {
+  private left: ExpressionNode;
+  private operator: string;
+  private right: ExpressionNode;
+
+  constructor(left: ExpressionNode, operator: string, right: ExpressionNode) {
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
+  }
+
+  evaluate(context: ExecutionContext): number {
+    const leftValue = this.left.evaluate(context);
+    const rightValue = this.right.evaluate(context);
+
+    switch (this.operator) {
+      case '+': return leftValue + rightValue;
+      case '-': return leftValue - rightValue;
+      case '*': return leftValue * rightValue;
+      case '/': return Math.floor(leftValue / rightValue);
+      case '%': return leftValue % rightValue;
+      default:
+        console.error(`Ошибка: Неизвестный оператор "${this.operator}"`);
+        return 0;
+    }
+  }
+}
+
+export class AssignNode implements ASTNode {
+  private varName: string;
+  private expression: ExpressionNode;
+
+  constructor(varName: string, expression: ExpressionNode) {
+    this.varName = varName;
+    this.expression = expression;
+  }
+
+  execute(context: ExecutionContext): void {
+    if (!context.variables.has(this.varName)) {
+      console.error(`Ошибка выполнения: Переменная "${this.varName}" еще не объявлена!`);
+      return;
+    }
+
+    const result = this.expression.evaluate(context);
+    context.variables.set(this.varName, result);
+    console.log(`Выполнено: ${this.varName} = ${result}`);
+  }
+}
