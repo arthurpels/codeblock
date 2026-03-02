@@ -1,4 +1,4 @@
-import { Program, DeclareNode } from "./logic"
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -12,6 +12,14 @@ blocks.forEach(block => {
     }
   });
 });
+
+function parseExpressionValue(val: string) {
+  if (!isNaN(Number(val)) && val.trim() !== "") {
+    return new NumberNode(Number(val));
+  } else {
+    return new ReadVariableNode(val);
+  }
+}
 
 
 workspace.addEventListener('dragover', (e) => {
@@ -45,10 +53,22 @@ workspace.addEventListener('drop', (e) => {
 
         case 'assign':
           newBlock.innerHTML = `
-          <div class="block-label">Присвоить значение:</div>
-          <input type="text" class="block-input var" placeholder="x">
-          <span>=</span>
-          <input type="text" class="block-input value" placeholder="10">
+            <div class="block-label">Присвоить:</div>
+            <input type="text" class="block-input assign-var" placeholder="x">
+            
+            <span>=</span>
+            
+            <input type="text" class="block-input math-left" placeholder="a или 5">
+            
+            <select class="block-input math-operator">
+              <option value="+">+</option>
+              <option value="-">-</option>
+              <option value="*">*</option>
+              <option value="/">/ (цел.)</option>
+              <option value="%">% (ост.)</option>
+            </select>
+            
+            <input type="text" class="block-input math-right" placeholder="b или 2">
           `;
           break;
 
@@ -94,7 +114,7 @@ startBtn.addEventListener('click', () => {
   console.log("Начинаем сборку алгоритма...");
 
   const program = new Program();
-  const visualBlocks = Array.from(workspace.querySelectorAll(".block"));
+  const visualBlocks = Array.from(workspace.querySelectorAll<HTMLDivElement>(".block"));
 
   for (const block of visualBlocks){
     const type = block.getAttribute('data-type');
@@ -105,19 +125,32 @@ startBtn.addEventListener('click', () => {
 
       if (!varName){
         console.error("Ошибка: Имя переменной не может быть пустым!");
-        // block.style.borderColor = 'red';
+        block.style.borderColor = 'red';
         return;
       }
+
 
       const node = new DeclareNode(varName);
 
       program.addNode(node);
+    } else if (type === "assign"){
+      const targetVarInput = block.querySelector(".assign-var") as HTMLInputElement;
+      const leftInput = block.querySelector('.math-left') as HTMLInputElement;
+      const operatorSelect = block.querySelector('.math-operator') as HTMLSelectElement;
+      const rightInput = block.querySelector('.math-right') as HTMLInputElement;
+
+      if (targetVarInput && leftInput && operatorSelect && rightInput) {
+        const leftNode = parseExpressionValue(leftInput.value);
+        const rightNode = parseExpressionValue(rightInput.value);
+        
+        const mathNode = new MathOperationNode(leftNode, operatorSelect.value, rightNode);
+        const assignNode = new AssignNode(targetVarInput.value, mathNode);
+        program.addNode(assignNode);
+      } else {
+        console.error("Ошибка парсинга: Блок присваивания имеет неверную HTML-структуру!");
+        block.style.borderColor = 'red';
+      }
     }
   }
   program.run();
 });
-
-const testProgram = new Program();
-testProgram.addNode(new DeclareNode("x"));
-testProgram.addNode(new DeclareNode("y"));
-testProgram.run();
