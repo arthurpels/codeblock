@@ -110,8 +110,10 @@ workspace.addEventListener('drop', (e) => {
 
 const startBtn = document.getElementById('start') as HTMLButtonElement;
 startBtn.addEventListener('click', () => {
-  console.clear();
-  console.log("Начинаем сборку алгоритма...");
+  const consolePanel = document.getElementById("console") as HTMLDivElement;
+  if (consolePanel) {
+    consolePanel.innerHTML = '';
+  }
 
   const program = new Program();
   const visualBlocks = Array.from(workspace.querySelectorAll<HTMLDivElement>(".block"));
@@ -123,8 +125,14 @@ startBtn.addEventListener('click', () => {
 
       const varName = inputElement ? inputElement.value : "unknown_var";
 
+
       if (!varName){
-        console.error("Ошибка: Имя переменной не может быть пустым!");
+        const consolePanel = document.getElementById("console") as HTMLDivElement;
+        if (consolePanel) {
+          const line = document.createElement("div");
+          line.textContent = "Ошибка: Имя переменной не может быть пустым!";
+          consolePanel.appendChild(line);
+        }
         block.style.borderColor = 'red';
         return;
       }
@@ -147,7 +155,12 @@ startBtn.addEventListener('click', () => {
         const assignNode = new AssignNode(targetVarInput.value, mathNode);
         program.addNode(assignNode);
       } else {
-        console.error("Ошибка парсинга: Блок присваивания имеет неверную HTML-структуру!");
+        const consolePanel = document.getElementById("console") as HTMLDivElement;
+        if (consolePanel) {
+          const line = document.createElement("div");
+          line.textContent = "Ошибка парсинга: Блок присваивания имеет неверную HTML-структуру!";
+          consolePanel.appendChild(line);
+        }
         block.style.borderColor = 'red';
       }
     }

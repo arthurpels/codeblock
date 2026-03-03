@@ -1,10 +1,18 @@
 export class ExecutionContext {
   public variables: Map<string, number> = new Map();
 
+  public print(message: string) {
+    const consolePanel = document.getElementById("console") as HTMLDivElement;
+    if (!consolePanel) return;
+    const line = document.createElement("div");
+    line.textContent = message;
+    consolePanel.appendChild(line);
+  }
+
   public printMemory(): void {
-    console.log("Текущее состояние памяти:");
+    this.print("Текущее состояние памяти:");
     this.variables.forEach((value, key) => {
-      console.log(`[${key}] = ${value}`);
+      this.print(`[${key}] = ${value}`);
     });
   }
 }
@@ -23,12 +31,12 @@ export class DeclareNode implements ASTNode {
 
   execute(context: ExecutionContext): void {
     if (context.variables.has(this.varName)) {
-      console.error(`Ошибка выполнения: Переменная "${this.varName}" уже существует!`);
+      context.print(`Ошибка выполнения: Переменная "${this.varName}" уже существует!`);
       return; 
     }
     
     context.variables.set(this.varName, 0);
-    console.log(`Выполнено: Объявлена переменная "${this.varName}" со значением 0`);
+    context.print(`Выполнено: Объявлена переменная "${this.varName}" со значением 0`);
   }
 }
 
@@ -42,13 +50,13 @@ export class Program {
 
   public run(): void {
     const context = new ExecutionContext();
-    console.log("=== ЗАПУСК ПРОГРАММЫ ===");
+    context.print("ЗАПУСК ПРОГРАММЫ");
     
     for (const node of this.nodes) {
       node.execute(context);
     }
     
-    console.log("=== ПРОГРАММА ЗАВЕРШЕНА ===");
+    context.print("ПРОГРАММА ЗАВЕРШЕНА");
     context.printMemory();
   }
 }
@@ -78,7 +86,7 @@ export class ReadVariableNode implements ExpressionNode {
 
   evaluate(context: ExecutionContext): number {
     if (!context.variables.has(this.varName)) {
-      console.error(`Ошибка: Переменная "${this.varName}" не найдена для чтения!`);
+      context.print(`Ошибка: Переменная "${this.varName}" не найдена для чтения!`);
       return 0;
     }
     return context.variables.get(this.varName)!;
@@ -107,7 +115,7 @@ export class MathOperationNode implements ExpressionNode {
       case '/': return Math.floor(leftValue / rightValue);
       case '%': return leftValue % rightValue;
       default:
-        console.error(`Ошибка: Неизвестный оператор "${this.operator}"`);
+        context.print(`Ошибка: Неизвестный оператор "${this.operator}"`);
         return 0;
     }
   }
@@ -124,12 +132,12 @@ export class AssignNode implements ASTNode {
 
   execute(context: ExecutionContext): void {
     if (!context.variables.has(this.varName)) {
-      console.error(`Ошибка выполнения: Переменная "${this.varName}" еще не объявлена!`);
+      context.print(`Ошибка выполнения: Переменная "${this.varName}" еще не объявлена!`);
       return;
     }
 
     const result = this.expression.evaluate(context);
     context.variables.set(this.varName, result);
-    console.log(`Выполнено: ${this.varName} = ${result}`);
+    context.print(`Выполнено: ${this.varName} = ${result}`);
   }
 }
