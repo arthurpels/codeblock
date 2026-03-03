@@ -1,17 +1,13 @@
 body {
   background: #430606;
   font-family: Arial;
-  /* отвечает за отступы вокруг всего документа */
   margin: 0;
   height: 100vh;
 }
 
 #all {
-  /* выстраивает в строку автоматически, адаптивное выравнивание */
   display: flex;
-  /* пространство между границей и всеми блоками */
   padding: 20px;
-  /* расстояние между дочерними элементами/блоками */
   gap: 20px;
   box-sizing: border-box;
   height: 100%;
@@ -25,10 +21,8 @@ h2 {
 
 .panel {
   border: 3px solid black;
-  /* box-sizing: border-box; */
   background: white;
   border-radius: 30px;
-  /* растягивает блок на всю высоту родителя */
   display: flex;
   flex-direction: column;
 }
@@ -40,10 +34,8 @@ h2 {
 #workspace {
   border: 3px solid black;
   background: #efeef1;
-  /* пространство между контентом элемента (текст, картинка) и его границей (border). размер окна*/
   padding: 10px;
   border-radius: 10px;
-  /* пунктирная рамка */
   border-style: dashed;
   flex: 1;
 }
@@ -58,21 +50,25 @@ h2 {
 #console {
   border: 3px solid black;
   background: rgb(198, 197, 197);
-  /* автоматически растягивает на всю высоту родителя */
   flex: 1;
   border-radius: 10px;
 }
 
 #blocks,
-#programm {
+#programm,
+#console-panel{
   border: 3px solid black;
   background: white;
-  padding: 50px;
+  padding: 30px;
+  width: 200px;
+}
+
+#blocks,
+#console-panel{
   width: 200px;
 }
 
 #programm {
-    /* занимает все свободное пространство */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -81,13 +77,10 @@ h2 {
 .block {
   background: white;
   border: 3px solid black;
-  /* закругляет углы */
   border-radius: 10px;
   padding: 10px;
-  /* расстояние вокруг элемента за его границей */
   margin: 5px   ;
   text-align: center;
-  /* наведение курсора на блоки */
   cursor: grab;
 }
 
@@ -113,11 +106,8 @@ div[data-type="while"] {
 
 #buttons {
   display: flex;
-  /* выравнивание по центру */
   justify-content: center;
-  /* отступ между кнопками */
   gap: 20px;
-  /* отступ от кнопок до границы ТОЛЬКО СВЕРХУ */
   margin-top: 20px; 
 }
 
