@@ -3,34 +3,54 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>codeblock</title>
+    <title>BlockScript</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+    <header>
+      <div class="logo">BlockScript</div>
+      </div>
+    </header>
+
     <div id="all">
       <div class="panel" id="blocks">
         <h2>Блоки</h2>
 
-        <h3>Переменные</h3>
-        <div class="block" data-type="declare">Объявить</div>
+        <div class="category">
+          <h3>Переменные</h3>
+          <div class="block yellow" data-type="declare">Объявить переменные</div>
+          <div class="block yellow" data-type="array">Объявить массив</div>
+        </div>
 
-        <h3>Операции</h3>
-        <div class="block" data-type="assign">Присвоить</div>
+        <div class="category">
+          <h3>Операции</h3>
+          <div class="block green" data-type="assign">Присвоить</div>
+        </div>
 
-        <h3>Логика</h3>
-        <div class="block" data-type="if">Если</div>
-        <div class="block" data-type="ifelse">Если/иначе</div>
+        <div class="category">
+          <h3>Условия</h3>
+          <div class="block blue" data-type="if">Если</div>
+          <div class="block blue" data-type="ifelse">Если/иначе</div>
+        </div>
 
-        <h3>Циклы</h3>
-        <div class="block" data-type="while">Пока</div>
+        <div class="category">
+          <h3>Циклы</h3>
+          <div class="block purple" data-type="while">Пока</div>
+        </div>
+
+        <div class="category">
+          <h3>Логика</h3>
+          <div class="block orange" data-type="compare">Сравнение</div>
+          <div class="block orange" data-type="logic">И / Или</div>
+        </div>
       </div>
 
       <div class="panel" id="programm">
         <h2>Программа</h2>
         <div id="workspace"></div>
-        <div id="buttons">
-          <button id="start">Запустить</button>
+        <div id="buttons"> 
+          <button id="start">Запустить</button> 
           <button id="stop">Остановить</button>
         </div>
       </div>
@@ -40,6 +60,6 @@
         <div id="console"></div>
       </div>
     </div>
-    <script type = "module" src="/src/main.ts"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
