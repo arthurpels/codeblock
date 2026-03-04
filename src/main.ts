@@ -96,6 +96,7 @@ workspace.addEventListener('drop', (e) => {
           <div class="block-label">Если:</div>
           <input type="text" class="block-input condition" placeholder="x > 0">
           <div class="if-else">Иначе:</div>
+          <input type="text" class="block-input else-action" placeholder="действие иначе">
           `;
           break;
 
@@ -103,6 +104,45 @@ workspace.addEventListener('drop', (e) => {
           newBlock.innerHTML = `
           <div class="block-label">Пока:</div>
           <input type="text" class="block-input condition" placeholder="x > 0">
+          `;
+          break;
+
+        case 'array':
+          newBlock.innerHTML = `
+          <div class="block-label">Объявить массив:</div>
+          <input type="text" class="block-input array-name" placeholder="имя массива">
+          <input type="text" class="block-input array-size" placeholder="размер">
+          `;
+          break;
+
+
+        case 'compare':
+          newBlock.innerHTML = `
+            <div class="block-label">Сравнение:</div>
+            <input type="text" class="block-input compare-left" placeholder="x или y">
+            
+            <select class="block-input compare-operator">
+              <option value="==">==</option>
+              <option value="!=">!=</option>
+              <option value="<">&lt;</option>
+              <option value=">">&gt;</option>
+              <option value="<=">&lt;=</option>
+              <option value=">=">&gt;=</option>
+            </select>
+            
+            <input type="text" class="block-input compare-right" placeholder="a или b">
+          `;
+          break;
+
+        case 'logic':
+          newBlock.innerHTML = `
+            <div class="block-label">Логическое выражение:</div>
+            <input type="text" class="block-input logic-left" placeholder="условие 1">
+            <select class="block-input logic-operator">
+              <option value="&&">И</option>
+              <option value="||">ИЛИ</option>
+            </select>
+            <input type="text" class="block-input logic-right" placeholder="условие 2">
           `;
           break;
 
