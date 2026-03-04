@@ -133,3 +133,59 @@ export class AssignNode implements ASTNode {
     console.log(`Выполнено: ${this.varName} = ${result}`);
   }
 }
+
+
+export interface BooleanExpressionNode {
+  evaluate(context: ExecutionContext): boolean;
+}
+
+export class ComparisonNode implements BooleanExpressionNode {
+  private left: ExpressionNode;
+  private operator: string;
+  private right: ExpressionNode;
+
+  constructor(left: ExpressionNode, operator: string, right: ExpressionNode) {
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
+  }
+
+  evaluate(context: ExecutionContext): boolean {
+    const leftValue = this.left.evaluate(context);
+    const rightValue = this.right.evaluate(context);
+
+    switch (this.operator) {
+      case '>': return leftValue > rightValue;
+      case '<': return leftValue < rightValue;
+      case '>=': return leftValue >= rightValue;
+      case '<=': return leftValue <= rightValue;
+      case '==': return leftValue === rightValue;
+      case '!=': return leftValue !== rightValue;
+      default:
+        console.error(`Ошибка: Неизвестный оператор сравнения "${this.operator}"`);
+        return false;
+    }
+  }
+}
+
+export class IfNode implements ASTNode {
+  private condition: BooleanExpressionNode;
+  private body: ASTNode[];
+
+  constructor(condition: BooleanExpressionNode, body: ASTNode[]) {
+    this.condition = condition;
+    this.body = body;
+  }
+
+  execute(context: ExecutionContext): void {
+    if (this.condition.evaluate(context)) {
+      console.log("Условие ИСТИННО! Выполняем внутренние блоки...");
+      
+      for (const node of this.body) {
+        node.execute(context);
+      }
+    } else {
+      console.log("Условие ЛОЖНО! Внутренние блоки пропущены.");
+    }
+  }
+}
