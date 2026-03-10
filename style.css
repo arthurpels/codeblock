@@ -195,7 +195,6 @@ div[data-type="while"] {
   background: rgb(232, 174, 237);
 }
 
-div[data-type="compare"],
 div[data-type="logic"] {
   background: rgb(232, 202, 154);
 }

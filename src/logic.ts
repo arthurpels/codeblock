@@ -187,13 +187,13 @@ export class IfNode implements ASTNode {
 
   execute(context: ExecutionContext): void {
     if (this.condition.evaluate(context)) {
-      console.log("Условие ИСТИННО! Выполняем внутренние блоки...");
+      context.print("Условие ИСТИННО! Выполняем внутренние блоки...");
       
       for (const node of this.body) {
         node.execute(context);
       }
     } else {
-      console.log("Условие ЛОЖНО! Внутренние блоки пропущены.");
+      context.print("Условие ЛОЖНО! Внутренние блоки пропущены.");
     }
   }
 }

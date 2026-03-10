@@ -1,4 +1,4 @@
-import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, type ASTNode } from './logic';
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, type ASTNode, type ExpressionNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -13,13 +13,53 @@ blocks.forEach(block => {
   });
 });
 
-function parseExpressionValue(val: string) {
-  const cleanVal = val.trim();
-  if (!isNaN(Number(val)) && cleanVal !== "") {
-    return new NumberNode(Number(cleanVal));
-  } else {
-    return new ReadVariableNode(cleanVal);
+function parseExpression(expr: string): ExpressionNode {
+  expr = expr.trim();
+  if (!isNaN(Number(expr))) {
+    return new NumberNode(Number(expr));
   }
+
+  while (expr.startsWith('(') && expr.endsWith(')')) {
+    let openBracketsCount = 0;
+    let isFullyWrapped = true;
+    for (let i = 0; i < expr.length; i++) {
+      if (expr[i] === '(') {
+        openBracketsCount++;
+      } 
+      else if (expr[i] === ')') {
+        openBracketsCount--;
+        if (openBracketsCount < 0) {
+          isFullyWrapped = false;
+          break;
+        }
+      }
+    }
+    if (isFullyWrapped) {
+      expr = expr.slice(1, -1).trim();
+    } 
+    else {
+      break;
+    }
+  }
+
+  const arithmeticOperators = ['+', '-', '*', '/', '%'];
+  for (const operatorSymbol of arithmeticOperators){
+    let bracketLevel = 0;
+    for (let i = expr.length - 1; i >= 0; i--) {
+      if (expr[i] === ')') {
+        bracketLevel++;
+      }
+      else if (expr[i] === '(') {
+        bracketLevel--;
+      }
+      else if (bracketLevel === 0 && expr[i] === operatorSymbol) {
+        const leftPart = expr.substring(0, i).trim();
+        const rightPart = expr.substring(i + 1).trim();
+        return new MathOperationNode(parseExpression(leftPart), operatorSymbol, parseExpression(rightPart));
+      }
+    }
+  }
+  return new ReadVariableNode(expr);
 }
 
 function addReorderButtons(newBlock: HTMLDivElement) {
@@ -225,8 +265,8 @@ startBtn.addEventListener('click', () => {
         const rightInput = block.querySelector('.math-right') as HTMLInputElement;
 
         if (targetVarInput && leftInput && operatorSelect && rightInput) {
-          const leftNode = parseExpressionValue(leftInput.value);
-          const rightNode = parseExpressionValue(rightInput.value);
+          const leftNode = parseExpression(leftInput.value);
+          const rightNode = parseExpression(rightInput.value);
           const mathNode = new MathOperationNode(leftNode, operatorSelect.value, rightNode);
           nodes.push(new AssignNode(targetVarInput.value.trim(), mathNode));
         } else {
@@ -241,8 +281,8 @@ startBtn.addEventListener('click', () => {
         const nestedWorkspace = block.querySelector('.nested-workspace') as HTMLDivElement;
 
         if (leftInput && operatorSelect && rightInput && nestedWorkspace) {
-          const leftNode = parseExpressionValue(leftInput.value);
-          const rightNode = parseExpressionValue(rightInput.value);
+          const leftNode = parseExpression(leftInput.value);
+          const rightNode = parseExpression(rightInput.value);
           const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
 
           const bodyNodes = parseBlocksFromContainer(nestedWorkspace);
