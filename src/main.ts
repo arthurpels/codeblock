@@ -22,6 +22,34 @@ function parseExpressionValue(val: string) {
   }
 }
 
+function addReorderButtons(newBlock: HTMLDivElement) {
+  const buttonBox = document.createElement('div');
+  buttonBox.className = 'block-controls';
+  buttonBox.style.cssText = 'position: absolute; right: 8px; top: 5px; display: flex; gap: 5px;';
+
+  const upButton = document.createElement('button');
+  upButton.textContent = '⬆';
+  upButton.onclick = (e) => {
+    e.stopPropagation();
+    const prev = newBlock.previousElementSibling;
+    if (prev && prev.classList.contains('block')) {
+      newBlock.parentNode?.insertBefore(newBlock, prev);
+    }
+  };
+
+  const downButton = document.createElement('button');
+  downButton.textContent = '⬇';
+  downButton.onclick = (e) => {
+    e.stopPropagation();
+    const next = newBlock.nextElementSibling;
+    if (next && next.classList.contains('block')) {
+      next.after(newBlock);
+    }
+  };
+  buttonBox.appendChild(upButton);
+  buttonBox.appendChild(downButton);
+  newBlock.appendChild(buttonBox);
+}
 
 workspace.addEventListener('dragover', (e) => {
   e.preventDefault();
@@ -155,6 +183,8 @@ workspace.addEventListener('drop', (e) => {
     removeButton.className = 'remove-button';
     removeButton.onclick = () => newBlock.remove(); 
     newBlock.appendChild(removeButton);
+
+    addReorderButtons(newBlock);
 
     const dropZone = (e.target as HTMLElement).closest('.nested-workspace') || workspace;
     dropZone.appendChild(newBlock);

@@ -66,6 +66,7 @@ header {
 }
 
 .block {
+  position: relative;
   background: #f9fafc;
   padding: 10px 12px;
   border-radius: 10px;
@@ -199,3 +200,12 @@ div[data-type="logic"] {
   background: rgb(232, 202, 154);
 }
 
+.block-controls button {
+  font-size: 18px;
+  padding: 1px 1px;
+  background: transparent;
+  color: grey;
+  border: 2px solid grey;
+  border-radius: 5px;
+  cursor: pointer;
+}
