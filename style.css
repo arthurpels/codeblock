@@ -112,6 +112,7 @@ header {
     linear-gradient(#e6e8f0 1px, transparent 1px),
     linear-gradient(90deg, #e6e8f0 1px, transparent 1px);
   background-size: 25px 25px;
+  overflow-y: auto;
 }
 
 #buttons {
@@ -172,6 +173,7 @@ header {
   padding: 15px;
   color: #333;
   font-size: 14px;
+  overflow-y: auto;
 }
 
 div[data-type="declare"],
