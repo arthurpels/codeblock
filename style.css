@@ -182,7 +182,8 @@ div[data-type="array"] {
   background: rgb(226, 231, 174);
 }
 
-div[data-type="assign"] {
+div[data-type="assign"],
+div[data-type="array-assign"]  {
   background: rgb(200, 246, 175);
 }
 

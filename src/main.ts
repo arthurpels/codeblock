@@ -1,4 +1,4 @@
-import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, type ASTNode, type ExpressionNode } from './logic';
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -214,6 +214,17 @@ workspace.addEventListener('drop', (e) => {
           `;
           break;
 
+        case 'array-assign':
+          newBlock.innerHTML = `
+            <div class="block-label">Присвоить элементу массива:</div>
+            <input type="text" class="block-input array-name" placeholder="имя массива">
+            [ 
+              <input type="text" class="block-input array-index" placeholder="индекс"> 
+            ] =
+            <input type="text" class="block-input array-value" placeholder="значение">
+            `;
+          break;
+
         default:
           newBlock.textContent = `Блок: ${blockType}`;
     }
@@ -258,6 +269,7 @@ startBtn.addEventListener('click', () => {
           if (cleanName) nodes.push(new DeclareNode(cleanName));
         }
       } 
+
       else if (type === "assign") {
         const targetVarInput = block.querySelector(".assign-var") as HTMLInputElement;
         const leftInput = block.querySelector('.math-left') as HTMLInputElement;
@@ -274,6 +286,7 @@ startBtn.addEventListener('click', () => {
           (block as HTMLElement).style.borderColor = 'red';
         }
       }
+
       else if (type === "if") {
         const leftInput = block.querySelector('.if-left') as HTMLInputElement;
         const operatorSelect = block.querySelector('.if-operator') as HTMLSelectElement;
@@ -291,6 +304,48 @@ startBtn.addEventListener('click', () => {
         } else {
           console.error("Ошибка: Блок IF сломан!");
           (block as HTMLElement).style.borderColor = 'red';
+        }
+      }
+
+      else if (type === "array"){
+        const nameInput = block.querySelector('.array-name') as HTMLInputElement;
+        const sizeInput = block.querySelector('.array-size') as HTMLInputElement;
+
+        if (nameInput && sizeInput) {
+          const arrayName = nameInput.value.trim();
+          const arraySize = parseInt(sizeInput.value.trim());
+
+          if (!arrayName){
+            console.error("Ошибка: Имя массива не может быть пустым!");
+            (block as HTMLElement).style.borderColor = 'red';
+            continue;
+          }
+
+          if (isNaN(arraySize) || arraySize <= 0) {
+            console.error("Ошибка: Размер массива должен быть положительным числом!");
+            (block as HTMLElement).style.borderColor = 'red';
+            continue;
+          }
+          nodes.push(new ArrayNode(arrayName, arraySize));
+        }
+      }
+
+      else if (type === "array-assign"){
+        const nameInput = block.querySelector('.array-name') as HTMLInputElement;
+        const indexInput = block.querySelector('.array-index') as HTMLInputElement;
+        const valueInput = block.querySelector('.array-value') as HTMLInputElement;
+
+        if (nameInput && indexInput && valueInput) {
+          const arrayName = nameInput.value.trim();
+          const indexNode = parseExpression(indexInput.value);
+          const valueNode = parseExpression(valueInput.value);
+
+          if (!arrayName){
+            console.error("Ошибка: Имя массива не может быть пустым!");
+            (block as HTMLElement).style.borderColor = 'red';
+            continue;
+          }
+          nodes.push(new AssignArrayNode(arrayName, indexNode, valueNode));
         }
       }
     }
