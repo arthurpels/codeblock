@@ -88,18 +88,18 @@ header {
 .purple { border-left-color: #9c27b0; }
 .orange { border-left-color: #ff9800; }
 
-#programm {
+#program {
   flex: 1;
 }
 
-#programm h2 {
+#program h2 {
   margin-bottom: 15px;
   font-size: 20px;
   font-weight: 600;
 }
 
 #blocks h2,
-#programm h2,
+#program h2,
 #console-panel h2 {
   text-align: center;
 }

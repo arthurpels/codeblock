@@ -244,7 +244,11 @@ workspace.addEventListener('drop', (e) => {
 
 const startBtn = document.getElementById('start') as HTMLButtonElement;
 startBtn.addEventListener('click', () => {
-  console.clear();
+  const consolePanel = document.getElementById("console") as HTMLDivElement;
+  if (consolePanel){
+    consolePanel.innerHTML = '';
+  }
+
   console.log("Начинаем сборку алгоритма...");
   const program = new Program();
 
