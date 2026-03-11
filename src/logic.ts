@@ -202,6 +202,34 @@
     }
   }
 
+  export class IfElseNode implements ASTNode {
+    private condition: BooleanExpressionNode;
+    private thenBody: ASTNode[];
+    private elseBody: ASTNode[];
+
+    constructor(condition: BooleanExpressionNode, thenBody: ASTNode[], elseBody: ASTNode[]) {
+      this.condition = condition;
+      this.thenBody = thenBody;
+      this.elseBody = elseBody;
+    }
+
+    execute(context: ExecutionContext): void {
+      if (this.condition.evaluate(context)) {
+        context.print(`Условие ИСТИННО! Выполняем блок "ЕСЛИ"`);
+
+        for (const node of this.thenBody) {
+          node.execute(context);
+        }
+      } else {
+        context.print(`Условие ЛОЖНО! Выполняем блок "ИНАЧЕ"`);
+
+        for (const node of this.elseBody) {
+          node.execute(context);
+        }
+      }
+    }
+  }
+
   export class WhileNode implements ASTNode {
     private condition: BooleanExpressionNode;
     private body: ASTNode[];

@@ -1,4 +1,4 @@
-import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode, WhileNode, ArrayAccessNode } from './logic';
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode, WhileNode, ArrayAccessNode, IfElseNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -169,9 +169,20 @@ workspace.addEventListener('drop', (e) => {
         case 'ifelse':
           newBlock.innerHTML = `
           <div class="block-label">Если:</div>
-          <input type="text" class="block-input condition" placeholder="x > 0">
+            <input type="text" class="block-input ifelse-left" placeholder="x">
+            <select class="block-input ifelse-operator">
+              <option value=">">></option>
+              <option value="<"><</option>
+              <option value=">=">>=</option>
+              <option value="<="><=</option>
+              <option value="==">==</option>
+              <option value="!=">!=</option>
+            </select>
+            <input type="text" class="block-input ifelse-right" placeholder="0">
+
+          <div class="then-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
           <div class="if-else">Иначе:</div>
-          <input type="text" class="block-input else-action" placeholder="действие иначе">
+          <div class="else-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
           `;
           break;
 
@@ -325,6 +336,28 @@ startBtn.addEventListener('click', () => {
           nodes.push(new IfNode(conditionNode, bodyNodes));
         } else {
           console.error("Ошибка: Блок IF сломан!");
+          (block as HTMLElement).style.borderColor = 'red';
+        }
+      }
+
+      else if (type === "ifelse") {
+        const leftInput = block.querySelector('.ifelse-left') as HTMLInputElement;
+        const operatorSelect = block.querySelector('.ifelse-operator') as HTMLSelectElement;
+        const rightInput = block.querySelector('.ifelse-right') as HTMLInputElement;
+        const thenWorkspace = block.querySelector('.then-workspace') as HTMLDivElement;
+        const elseWorkspace = block.querySelector('.else-workspace') as HTMLDivElement;
+
+        if (leftInput && operatorSelect && rightInput && thenWorkspace && elseWorkspace) {
+          const leftNode = parseExpression(leftInput.value.trim());
+          const rightNode = parseExpression(rightInput.value.trim()); 
+          const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
+
+          const thenNodes = parseBlocksFromContainer(thenWorkspace);
+          const elseNodes = parseBlocksFromContainer(elseWorkspace);
+
+          nodes.push(new IfElseNode(conditionNode, thenNodes, elseNodes));
+        } else {
+          console.error("Ошибка: блок IFELSE сломан!");
           (block as HTMLElement).style.borderColor = 'red';
         }
       }
