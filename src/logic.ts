@@ -202,6 +202,27 @@
     }
   }
 
+  export class WhileNode implements ASTNode {
+    private condition: BooleanExpressionNode;
+    private body: ASTNode[];
+
+    constructor(condition: BooleanExpressionNode, body: ASTNode[]) {
+      this.condition = condition;
+      this.body = body;
+    }
+
+    execute(context: ExecutionContext): void {
+      context.print(`Запуск цикла "ПОКА"...`);
+
+      while (this.condition.evaluate(context)) {
+        for (const node of this.body) {
+          node.execute(context);
+        }
+      }
+      context.print(`Цикл "ПОКА" завершен.`);
+    }
+  }
+
   export class ArrayNode implements ASTNode {
     private name: string;
     private size: number;
@@ -248,3 +269,27 @@
       context.print(`Выполнено: ${this.name}[${idx}] = ${val}`);
     }
   }
+
+  export class ArrayAccessNode implements ExpressionNode {
+    private name: string;
+    private index: ExpressionNode;
+
+    constructor(name: string, index: ExpressionNode) {
+      this.name = name;
+      this.index = index;
+    }
+
+    evaluate(context: ExecutionContext): number {
+      const arr = context.arrays.get(this.name);
+      if (!arr) {
+        context.print(`Ошибка: Массив "${this.name}" не найден для чтения`);
+        return 0;
+    }
+    const idx = this.index.evaluate(context);
+    if (idx < 0 || idx >= arr.length) {
+      context.print(`Ошибка: Индекс ${idx} вне диапазона массива "${this.name}"`);
+      return 0;
+    }
+    return arr[idx];
+  }
+}

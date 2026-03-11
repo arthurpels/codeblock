@@ -1,4 +1,4 @@
-import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode } from './logic';
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode, WhileNode, ArrayAccessNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -15,6 +15,13 @@ blocks.forEach(block => {
 
 function parseExpression(expr: string): ExpressionNode {
   expr = expr.trim();
+
+  if (expr.includes('[') && expr.endsWith(']')) {
+    const openBraketIndex = expr.indexOf('[');
+    const arrayName = expr.substring(0, openBraketIndex).trim();
+    const indexContent = expr.substring(openBraketIndex + 1, expr.length - 1).trim();
+    return new ArrayAccessNode(arrayName, parseExpression(indexContent));
+  }
   if (!isNaN(Number(expr))) {
     return new NumberNode(Number(expr));
   }
@@ -171,7 +178,18 @@ workspace.addEventListener('drop', (e) => {
         case 'while':
           newBlock.innerHTML = `
           <div class="block-label">Пока:</div>
-          <input type="text" class="block-input condition" placeholder="x > 0">
+            <input type="text" class="block-input while-left" placeholder="x">
+            <select class="block-input while-operator">
+              <option value=">">></option>
+              <option value="<"><</option>
+              <option value=">=">>=</option>
+              <option value="<="><=</option>
+              <option value="==">==</option>
+              <option value="!=">!=</option>
+            </select>
+            <input type="text" class="block-input while-right" placeholder="0">
+
+          <div class="nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
           `;
           break;
 
@@ -307,6 +325,26 @@ startBtn.addEventListener('click', () => {
           nodes.push(new IfNode(conditionNode, bodyNodes));
         } else {
           console.error("Ошибка: Блок IF сломан!");
+          (block as HTMLElement).style.borderColor = 'red';
+        }
+      }
+
+      else if (type === "while") {
+        const leftInput = block.querySelector('.while-left') as HTMLInputElement;
+        const operatorSelect = block.querySelector('.while-operator') as HTMLSelectElement;
+        const rightInput = block.querySelector('.while-right') as HTMLInputElement;
+        const nestedWorkspace = block.querySelector('.nested-workspace') as HTMLDivElement;
+
+        if (leftInput && operatorSelect && rightInput && nestedWorkspace) {
+          const leftNode = parseExpression(leftInput.value);
+          const rightNode = parseExpression(rightInput.value);
+          const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
+
+          const bodyNodes = parseBlocksFromContainer(nestedWorkspace);
+
+          nodes.push(new WhileNode(conditionNode, bodyNodes));
+        } else {
+          console.error("Ошибка: Блок WHILE сломан!");
           (block as HTMLElement).style.borderColor = 'red';
         }
       }
