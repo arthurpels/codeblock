@@ -196,7 +196,10 @@ div[data-type="while"] {
   background: rgb(232, 174, 237);
 }
 
-div[data-type="logic"] {
+div[data-type="not"],
+div[data-type="and"],
+div[data-type="or"],
+div[data-type="condition"] {
   background: rgb(232, 202, 154);
 }
 
