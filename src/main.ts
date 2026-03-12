@@ -373,10 +373,10 @@ startBtn.addEventListener('click', () => {
         if (conditionWorkspace && thenWorkspace && elseWorkspace) {
           const conditionNode = parseCondition(conditionWorkspace);
           const thenNodes = parseBlocksFromContainer(thenWorkspace);
-          const elseNides = parseBlocksFromContainer(elseWorkspace);
+          const elseNodes = parseBlocksFromContainer(elseWorkspace);
 
           if (conditionNode) {
-            nodes.push(new IfElseNode(conditionNode, thenNodes, elseNides));
+            nodes.push(new IfElseNode(conditionNode, thenNodes, elseNodes));
           }
         }
       }
