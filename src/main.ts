@@ -393,7 +393,7 @@ startBtn.addEventListener('click', () => {
           (block as HTMLElement).style.borderColor = 'red';
         }
       }
-
+      
       else if (type === "array"){
         const nameInput = block.querySelector('.array-name') as HTMLInputElement;
         const sizeInput = block.querySelector('.array-size') as HTMLInputElement;

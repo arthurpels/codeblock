@@ -321,3 +321,44 @@
     return arr[idx];
   }
 }
+
+export class AndNode implements BooleanExpressionNode {
+
+  private left: BooleanExpressionNode;
+  private right: BooleanExpressionNode;
+
+  constructor(left: BooleanExpressionNode, right: BooleanExpressionNode) {
+    this.left = left;
+    this.right = right;
+  }
+
+  evaluate(context: ExecutionContext): boolean {
+    return this.left.evaluate(context) && this.right.evaluate(context);
+  }
+}
+
+export class OrNode implements BooleanExpressionNode {
+  private left: BooleanExpressionNode;
+  private right: BooleanExpressionNode;
+
+  constructor(left: BooleanExpressionNode, right: BooleanExpressionNode) {
+    this.left = left;
+    this.right = right;
+  }
+
+  evaluate(context: ExecutionContext): boolean {
+    return this.left.evaluate(context) || this.right.evaluate(context);
+  }
+}
+
+export class NotNode implements BooleanExpressionNode {
+  private expression: BooleanExpressionNode;
+
+  constructor(expression: BooleanExpressionNode) {
+    this.expression = expression;
+  }
+
+  evaluate(context: ExecutionContext): boolean {
+    return !this.expression.evaluate(context);
+  }
+}
