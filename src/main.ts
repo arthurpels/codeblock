@@ -1,4 +1,4 @@
-import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, type ASTNode, type ExpressionNode, WhileNode, ArrayAccessNode, IfElseNode } from './logic';
+import { Program, DeclareNode, AssignNode, NumberNode, ReadVariableNode, MathOperationNode, IfNode, ComparisonNode, ArrayNode, AssignArrayNode, AndNode, OrNode, NotNode, type ASTNode, type ExpressionNode, WhileNode, ArrayAccessNode, IfElseNode } from './logic';
 const blocks = document.querySelectorAll<HTMLDivElement>('.block');
 const workspace = document.getElementById('workspace') as HTMLDivElement;
 
@@ -191,37 +191,6 @@ workspace.addEventListener('drop', (e) => {
           `;
           break;
 
-
-        case 'compare':
-          newBlock.innerHTML = `
-            <div class="block-label">Сравнение:</div>
-            <input type="text" class="block-input compare-left" placeholder="x или y">
-            
-            <select class="block-input compare-operator">
-              <option value="==">==</option>
-              <option value="!=">!=</option>
-              <option value="<">&lt;</option>
-              <option value=">">&gt;</option>
-              <option value="<=">&lt;=</option>
-              <option value=">=">&gt;=</option>
-            </select>
-            
-            <input type="text" class="block-input compare-right" placeholder="a или b">
-          `;
-          break;
-
-        case 'logic':
-          newBlock.innerHTML = `
-            <div class="block-label">Логическое выражение:</div>
-            <input type="text" class="block-input logic-left" placeholder="условие 1">
-            <select class="block-input logic-operator">
-              <option value="&&">И</option>
-              <option value="||">ИЛИ</option>
-            </select>
-            <input type="text" class="block-input logic-right" placeholder="условие 2">
-          `;
-          break;
-
         case 'array-assign':
           newBlock.innerHTML = `
             <div class="block-label">Присвоить элементу массива:</div>
@@ -244,7 +213,7 @@ workspace.addEventListener('drop', (e) => {
               <option value="<=">&lt;=</option>
               <option value=">=">&gt;=</option>
             </select>
-            <input type="text" class="block-input cond-left" placeholder="b">
+            <input type="text" class="block-input cond-right" placeholder="b">
             `;
           break;
 
@@ -292,6 +261,56 @@ startBtn.addEventListener('click', () => {
 
   console.log("Начинаем сборку алгоритма...");
   const program = new Program();
+
+  function parseCondition(container: Element): any {
+    const blocks = Array.from(container.children).filter(el => el.classList.contains('block'));
+    let parts: any[] = [];
+    for (const block of blocks) {
+      const type = block.getAttribute('data-type');
+      if (type === "condition") {
+        const left = (block.querySelector('.cond-left') as HTMLInputElement).value;
+        const operator = (block.querySelector('.cond-operator') as HTMLSelectElement).value;
+        const right = (block.querySelector('.cond-right') as HTMLInputElement).value;
+
+        parts.push(new ComparisonNode(parseExpression(left), operator, parseExpression(right)));
+      }
+      else if (type === "and" || type === "or" || type === "not") {
+        parts.push(type);
+      }
+    }
+    
+    if (parts.length === 1 && typeof parts[0] !== 'string') {
+      return parts[0];
+    }
+
+    const processed: any[] = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i] === 'not') {
+        const next = parts[i + 1];
+        if (next) {
+          processed.push(new NotNode(next));
+          i++;
+        }
+      } else {
+        processed.push(parts[i]);
+      }
+    }
+
+    let result = processed[0];
+    for (let i = 1; i < processed.length; i += 2) {
+      const operator = processed[i];
+      const nextNode = processed[i + 1];
+      if (!nextNode) break;
+
+      if (operator === 'and'){
+        result = new AndNode(result, nextNode);
+        }
+      else if (operator === 'or') {
+        result = new OrNode(result, nextNode);
+        }
+    }
+    return result;
+  }
 
   function parseBlocksFromContainer(container: Element): ASTNode[] {
     const nodes: ASTNode[] = [];
