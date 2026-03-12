@@ -151,56 +151,35 @@ workspace.addEventListener('drop', (e) => {
         case 'if':
           newBlock.innerHTML = `
             <div class="block-label">Если:</div>
-            <input type="text" class="block-input if-left" placeholder="x">
-            <select class="block-input if-operator">
-              <option value=">">></option>
-              <option value="<"><</option>
-              <option value=">=">>=</option>
-              <option value="<="><=</option>
-              <option value="==">==</option>
-              <option value="!=">!=</option>
-            </select>
-            <input type="text" class="block-input if-right" placeholder="0">
+            <div class="condition-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
+
+            <div class="block-label">Тогда:</div>
+            <div class="then-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
             
-            <div class="nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
           `;
           break;
 
         case 'ifelse':
           newBlock.innerHTML = `
           <div class="block-label">Если:</div>
-            <input type="text" class="block-input ifelse-left" placeholder="x">
-            <select class="block-input ifelse-operator">
-              <option value=">">></option>
-              <option value="<"><</option>
-              <option value=">=">>=</option>
-              <option value="<="><=</option>
-              <option value="==">==</option>
-              <option value="!=">!=</option>
-            </select>
-            <input type="text" class="block-input ifelse-right" placeholder="0">
+          <div class="condition-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
 
+          <div class="block-label">Тогда:</div>
           <div class="then-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
-          <div class="if-else">Иначе:</div>
+
+          <div class="block-label">Иначе:</div>
           <div class="else-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
+
           `;
           break;
 
         case 'while':
           newBlock.innerHTML = `
           <div class="block-label">Пока:</div>
-            <input type="text" class="block-input while-left" placeholder="x">
-            <select class="block-input while-operator">
-              <option value=">">></option>
-              <option value="<"><</option>
-              <option value=">=">>=</option>
-              <option value="<="><=</option>
-              <option value="==">==</option>
-              <option value="!=">!=</option>
-            </select>
-            <input type="text" class="block-input while-right" placeholder="0">
+          <div class="condition-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
 
-          <div class="nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
+          <div class="block-label">Выполнять:</div>
+          <div class="action-workspace nested-workspace" style="min-height: 40px; margin-top: 10px; padding: 10px; border: 2px dashed #ccc; background: rgba(255,255,255,0.5);"></div>
           `;
           break;
 
@@ -251,6 +230,39 @@ workspace.addEventListener('drop', (e) => {
               <input type="text" class="block-input array-index" placeholder="индекс"> 
             ] =
             <input type="text" class="block-input array-value" placeholder="значение">
+            `;
+          break;
+        case 'condition':
+          newBlock.innerHTML = `
+            <div class="block-label">Условие:</div>
+            <input type="text" class="block-input cond-left" placeholder="a">
+            <select class="block-input cond-operator">
+              <option value="==">==</option>
+              <option value="!=">!=</option>
+              <option value="<">&lt;</option>
+              <option value=">">&gt;</option>
+              <option value="<=">&lt;=</option>
+              <option value=">=">&gt;=</option>
+            </select>
+            <input type="text" class="block-input cond-left" placeholder="b">
+            `;
+          break;
+
+        case 'and':
+          newBlock.innerHTML = `
+            <div class="block-label">AND</div>
+            `;
+          break;
+
+        case 'or':
+          newBlock.innerHTML = `
+            <div class="block-label">OR</div>
+            `;
+          break;
+
+        case 'not':
+          newBlock.innerHTML = `
+            <div class="block-label">NOT</div>
             `;
           break;
 
