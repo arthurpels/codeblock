@@ -85,7 +85,7 @@ header {
 .yellow { border-left-color: #f4c430; }
 .green { border-left-color: #4caf50; }
 .blue { border-left-color: #4f6df5; }
-.purple { border-left-color: #9c27b0; }
+.purple { border-left-color: #c560d7; }
 .orange { border-left-color: #ff9800; }
 
 #program {
@@ -200,7 +200,7 @@ div[data-type="not"],
 div[data-type="and"],
 div[data-type="or"],
 div[data-type="condition"] {
-  background: rgb(232, 202, 154);
+  background: rgb(227, 206, 171);
 }
 
 .block-controls button {

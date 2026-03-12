@@ -352,64 +352,46 @@ startBtn.addEventListener('click', () => {
       }
 
       else if (type === "if") {
-        const leftInput = block.querySelector('.if-left') as HTMLInputElement;
-        const operatorSelect = block.querySelector('.if-operator') as HTMLSelectElement;
-        const rightInput = block.querySelector('.if-right') as HTMLInputElement;
-        const nestedWorkspace = block.querySelector('.nested-workspace') as HTMLDivElement;
+        const conditionWorkspace = block.querySelector('.condition-workspace') as HTMLDivElement;
+        const thenWorkspace = block.querySelector('.then-workspace') as HTMLDivElement;
 
-        if (leftInput && operatorSelect && rightInput && nestedWorkspace) {
-          const leftNode = parseExpression(leftInput.value);
-          const rightNode = parseExpression(rightInput.value);
-          const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
+        if (conditionWorkspace && thenWorkspace) {
+          const conditionNode = parseCondition(conditionWorkspace);
+          const bodyNodes = parseBlocksFromContainer(thenWorkspace);
 
-          const bodyNodes = parseBlocksFromContainer(nestedWorkspace);
-
-          nodes.push(new IfNode(conditionNode, bodyNodes));
-        } else {
-          console.error("Ошибка: Блок IF сломан!");
-          (block as HTMLElement).style.borderColor = 'red';
+          if (conditionNode) {
+            nodes.push(new IfNode(conditionNode, bodyNodes));
+          }
         }
       }
 
       else if (type === "ifelse") {
-        const leftInput = block.querySelector('.ifelse-left') as HTMLInputElement;
-        const operatorSelect = block.querySelector('.ifelse-operator') as HTMLSelectElement;
-        const rightInput = block.querySelector('.ifelse-right') as HTMLInputElement;
+        const conditionWorkspace = block.querySelector('.condition-workspace') as HTMLDivElement;
         const thenWorkspace = block.querySelector('.then-workspace') as HTMLDivElement;
         const elseWorkspace = block.querySelector('.else-workspace') as HTMLDivElement;
 
-        if (leftInput && operatorSelect && rightInput && thenWorkspace && elseWorkspace) {
-          const leftNode = parseExpression(leftInput.value.trim());
-          const rightNode = parseExpression(rightInput.value.trim()); 
-          const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
-
+        if (conditionWorkspace && thenWorkspace && elseWorkspace) {
+          const conditionNode = parseCondition(conditionWorkspace);
           const thenNodes = parseBlocksFromContainer(thenWorkspace);
-          const elseNodes = parseBlocksFromContainer(elseWorkspace);
+          const elseNides = parseBlocksFromContainer(elseWorkspace);
 
-          nodes.push(new IfElseNode(conditionNode, thenNodes, elseNodes));
-        } else {
-          console.error("Ошибка: блок IFELSE сломан!");
-          (block as HTMLElement).style.borderColor = 'red';
+          if (conditionNode) {
+            nodes.push(new IfElseNode(conditionNode, thenNodes, elseNides));
+          }
         }
       }
 
       else if (type === "while") {
-        const leftInput = block.querySelector('.while-left') as HTMLInputElement;
-        const operatorSelect = block.querySelector('.while-operator') as HTMLSelectElement;
-        const rightInput = block.querySelector('.while-right') as HTMLInputElement;
-        const nestedWorkspace = block.querySelector('.nested-workspace') as HTMLDivElement;
+        const conditionWorkspace = block.querySelector('.condition-workspace') as HTMLDivElement;
+        const actionWorkspace = block.querySelector('.action-workspace') as HTMLDivElement;
 
-        if (leftInput && operatorSelect && rightInput && nestedWorkspace) {
-          const leftNode = parseExpression(leftInput.value);
-          const rightNode = parseExpression(rightInput.value);
-          const conditionNode = new ComparisonNode(leftNode, operatorSelect.value, rightNode);
+        if (conditionWorkspace && actionWorkspace) {
+          const conditionNode = parseCondition(conditionWorkspace);
+          const bodyNodes = parseBlocksFromContainer(actionWorkspace);
 
-          const bodyNodes = parseBlocksFromContainer(nestedWorkspace);
-
-          nodes.push(new WhileNode(conditionNode, bodyNodes));
-        } else {
-          console.error("Ошибка: Блок WHILE сломан!");
-          (block as HTMLElement).style.borderColor = 'red';
+          if (conditionNode) {
+            nodes.push(new WhileNode(conditionNode, bodyNodes));
+          }
         }
       }
       
