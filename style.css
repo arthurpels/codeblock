@@ -145,13 +145,13 @@ header {
   box-shadow: 0 6px 16px rgba(5, 121, 55, 0.4);
 }
 
-#stop {
+#clear {
   background:  #f1f3f9;
   color: #444;
   cursor: pointer;
 }
 
-#stop:hover {
+#clear:hover {
   background: #dbdde8;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(59, 65, 62, 0.4);

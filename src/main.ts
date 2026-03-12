@@ -252,6 +252,15 @@ workspace.addEventListener('drop', (e) => {
   }
 });
 
+const clearBtn = document.getElementById('clear') as HTMLButtonElement;
+clearBtn.addEventListener('click', () => {
+  workspace.innerHTML = '';
+  const consolePanel = document.getElementById("console") as HTMLDivElement;
+  if (consolePanel){
+    consolePanel.innerHTML = '';
+  }
+});
+
 const startBtn = document.getElementById('start') as HTMLButtonElement;
 startBtn.addEventListener('click', () => {
   const consolePanel = document.getElementById("console") as HTMLDivElement;
