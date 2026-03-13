@@ -72,7 +72,6 @@ function parseExpression(expr: string): ExpressionNode {
 function addReorderButtons(newBlock: HTMLDivElement) {
   const buttonBox = document.createElement('div');
   buttonBox.className = 'block-controls';
-  buttonBox.style.cssText = 'position: absolute; right: 8px; top: 5px; display: flex; gap: 5px;';
 
   const upButton = document.createElement('button');
   upButton.textContent = '⬆';
@@ -239,13 +238,16 @@ workspace.addEventListener('drop', (e) => {
           newBlock.textContent = `Блок: ${blockType}`;
     }
 
+    addReorderButtons(newBlock);
+
     const removeButton = document.createElement('button');
     removeButton.textContent = 'X';
     removeButton.className = 'remove-button';
     removeButton.onclick = () => newBlock.remove(); 
-    newBlock.appendChild(removeButton);
-
-    addReorderButtons(newBlock);
+    const controls = newBlock.querySelector('.block-controls');
+    if (controls) {
+      controls.appendChild(removeButton);
+    }
 
     const dropZone = (e.target as HTMLElement).closest('.nested-workspace') || workspace;
     dropZone.appendChild(newBlock);

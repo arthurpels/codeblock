@@ -203,12 +203,44 @@ div[data-type="condition"] {
   background: rgb(227, 206, 171);
 }
 
-.block-controls button {
-  font-size: 18px;
-  padding: 1px 1px;
-  background: transparent;
-  color: grey;
-  border: 2px solid grey;
-  border-radius: 5px;
-  cursor: pointer;
+.block-controls {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
+
+.block-controls button {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid #c8c5c5;
+  background: #f7f5f5;
+  color: #605f5f;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.block-controls button:not(.remove-button):hover {
+  background: #e5e7f0; 
+  border-color: #4f6df5;
+  color: #4f6df5;
+  transform: translateY(-1px);
+}
+
+.block-controls .remove-button:hover {
+  background: #fc5959;
+  border-color: #fc5959;
+  color: white;
+  transform: translateY(-1px);
+}
+
+
+
