@@ -35,6 +35,10 @@ function parseExpression(expr: string): ExpressionNode {
       } 
       else if (expr[i] === ')') {
         openBracketsCount--;
+        if (openBracketsCount === 0 && i < expr.length - 1) {
+          isFullyWrapped = false;
+          break;
+        }
         if (openBracketsCount < 0) {
           isFullyWrapped = false;
           break;
@@ -273,6 +277,16 @@ startBtn.addEventListener('click', () => {
   console.log("Начинаем сборку алгоритма...");
   const program = new Program();
 
+  function printError(msg: string) {
+    console.error(msg);
+    if (consolePanel) {
+      const line = document.createElement("div");
+      line.textContent = msg;
+      line.style.color = "red";
+      consolePanel.appendChild(line);
+    }
+  }
+
   function parseCondition(container: Element): any {
     const blocks = Array.from(container.children).filter(el => el.classList.contains('block'));
     let parts: any[] = [];
@@ -334,7 +348,7 @@ startBtn.addEventListener('click', () => {
         const inputElement = block.querySelector(".var-name-input") as HTMLInputElement;
         const rawValue = inputElement ? inputElement.value : "";
         if (!rawValue.trim()) {
-          console.error("Ошибка: Поле объявления пустое!");
+          printError("Ошибка: Поле объявления пустое!");
           (block as HTMLElement).style.borderColor = 'red';
           continue;
         }
@@ -357,7 +371,7 @@ startBtn.addEventListener('click', () => {
           const mathNode = new MathOperationNode(leftNode, operatorSelect.value, rightNode);
           nodes.push(new AssignNode(targetVarInput.value.trim(), mathNode));
         } else {
-          console.error("Ошибка HTML-структуры присваивания!");
+          printError("Ошибка HTML-структуры присваивания!");
           (block as HTMLElement).style.borderColor = 'red';
         }
       }
@@ -415,13 +429,13 @@ startBtn.addEventListener('click', () => {
           const arraySize = parseInt(sizeInput.value.trim());
 
           if (!arrayName){
-            console.error("Ошибка: Имя массива не может быть пустым!");
+            printError("Ошибка: Имя массива не может быть пустым!");
             (block as HTMLElement).style.borderColor = 'red';
             continue;
           }
 
           if (isNaN(arraySize) || arraySize <= 0) {
-            console.error("Ошибка: Размер массива должен быть положительным числом!");
+            printError("Ошибка: Размер массива должен быть положительным числом!");
             (block as HTMLElement).style.borderColor = 'red';
             continue;
           }
@@ -440,7 +454,7 @@ startBtn.addEventListener('click', () => {
           const valueNode = parseExpression(valueInput.value);
 
           if (!arrayName){
-            console.error("Ошибка: Имя массива не может быть пустым!");
+            printError("Ошибка: Имя массива не может быть пустым!");
             (block as HTMLElement).style.borderColor = 'red';
             continue;
           }
